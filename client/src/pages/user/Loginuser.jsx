@@ -23,6 +23,38 @@ const Loginuser = () => {
     await axios.post(`${apiUrl}user/signin/`, { email, password }).then((response) => {
       console.log(response.data);
 
+      setInterval(() => {
+        const storedSubTask = JSON.parse(localStorage.getItem("subTask"));
+        if (storedSubTask && storedSubTask.expiresAt < new Date().getTime()) {
+          localStorage.removeItem("subTask");
+          localStorage.setItem(
+            "subTask",
+            JSON.stringify({
+              value: 0,
+              expiresAt: expirationTime,
+            })
+          );
+          console.log("subTask expired and removed automatically");
+        }
+      }, 60 * 1000); // Check every minute
+      
+
+      setInterval(() => {
+        const storedvideoTask = JSON.parse(localStorage.getItem("videoTask"));
+        if (storedvideoTask && storedvideoTask.expiresAt < new Date().getTime()) {
+          localStorage.removeItem("videoTask");
+          localStorage.setItem(
+            "videoTask",
+            JSON.stringify({
+              value: 0,
+              expiresAt: expirationTime,
+            })
+          );
+          console.log("videoTask expired and removed automatically");
+        }
+      }, 60 * 1000); // Check every minute
+
+
       let status = response.data.user.status;
 
       const today = new Date().toISOString().split("T")[0];
